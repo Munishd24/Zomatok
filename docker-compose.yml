@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  # 1. MongoDB Service (Database)
+  mongo:
+    image: mongo:latest
+    container_name: foodview_mongodb
+    restart: always # Always restart the container if it stops
+    ports:
+      # Map container port 27017 to Windows/WSL host port 27017
+      - "27017:27017"
+    environment:
+      # Optional: Set root credentials for security (replace with strong password)
+      MONGO_INITDB_ROOT_USERNAME: rootuser
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_DATABASE: foodview_db
+    volumes:
+      # Persist data on your local system so it's not lost when the container stops
+      - mongo_data:/data/db 
+
+# Define the volumes used by the services
+volumes:
+  mongo_data:

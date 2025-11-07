@@ -34,11 +34,11 @@ const UserLogin = () => {
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="field-group">
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" />
+            <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
           </div>
           <div className="field-group">
             <label htmlFor="password">Password</label>
-            <input id="password" name="password" type="password" placeholder="••••••••" autoComplete="current-password" />
+            <input id="password" name="password" type="password" placeholder="••••••••" autoComplete="current-password" required />
           </div>
           <button className="auth-submit" type="submit">Sign In</button>
         </form>

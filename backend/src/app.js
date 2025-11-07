@@ -7,9 +7,14 @@ const foodPartnerRoutes = require('./routes/food-partner.routes');
 const cors = require('cors');
 
 const app = express();
+// In your backend server file (e.g., server.js or app.js)
+
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+    origin: [
+        "http://localhost:5173",  // The common name
+        "http://127.0.0.1:5173"   // The specific IP the browser used
+    ],
+    credentials: true // Keep this since your frontend is sending credentials
 }));
 app.use(cookieParser());
 app.use(express.json());
