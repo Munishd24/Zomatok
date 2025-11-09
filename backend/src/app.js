@@ -11,10 +11,13 @@ const app = express();
 
 app.use(cors({
     origin: [
-        "http://localhost:5173",  // The common name
-        "http://127.0.0.1:5173"   // The specific IP the browser used
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
     ],
-    credentials: true // Keep this since your frontend is sending credentials
+    credentials: true,
+    exposedHeaders: ['set-cookie']
 }));
 app.use(cookieParser());
 app.use(express.json());

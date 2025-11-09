@@ -2,40 +2,56 @@
 
 .bottom-nav {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
-  height: 56px;
-   background: color-mix(in srgb, #000 35%, transparent);
-  backdrop-filter: blur(2px);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.15);
-  box-shadow: var(--shadow-md);
-  border-top: 1px solid var(--color-border);
-  z-index: 50;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #000;
+  border-top: 1px solid #262626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .bottom-nav__inner {
-  max-width: 720px;
-  margin: 0 auto;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 500px;
+  justify-content: space-around;
+  padding: 0 1rem;
 }
 
 .bottom-nav__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-secondary);
+  gap: 0.25rem;
+  color: #8e8e8e;
   text-decoration: none;
-  gap: 2px;
+  transition: color 0.2s ease;
 }
 
-.bottom-nav__item.is-active { color: var(--color-text); }
+.bottom-nav__item:hover {
+  color: #fff;
+}
 
-.bottom-nav__icon { line-height: 0; }
+.bottom-nav__item.is-active {
+  color: #fff;
+}
 
-.bottom-nav__label { font-size: 12px; }
+.bottom-nav__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-nav__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
 
 /* Safe area for iOS */
 @supports(padding: max(0px)) {

@@ -7,13 +7,13 @@ const router = express.Router();
 router.post('/user/register', authController.registerUser)
 router.post('/user/login', authController.loginUser)
 router.get('/user/logout', authController.logoutUser)
-
-
+router.get('/user/check', authController.checkUser)
 
 // food partner auth APIs
 router.post('/food-partner/register', authController.registerFoodPartner)
 router.post('/food-partner/login', authController.loginFoodPartner)
 router.get('/food-partner/logout', authController.logoutFoodPartner)
+router.get('/food-partner/check', authController.checkFoodPartner)
 
 
 

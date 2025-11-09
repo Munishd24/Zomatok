@@ -1,35 +1,42 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/auth-shared.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const UserRegister = () => {
-
     const navigate = useNavigate();
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
-        const firstName = e.target.firstName.value;
-        const lastName = e.target.lastName.value;
-        const email = e.target.email.value;
-        const password = e.target.password.value;
+        try {
+            const firstName = e.target.firstName.value;
+            const lastName = e.target.lastName.value;
+            const email = e.target.email.value;
+            const password = e.target.password.value;
 
+            const response = await axios.post("http://localhost:3000/api/auth/user/register", {
+                fullName: firstName + " " + lastName,
+                email,
+                password
+            }, {
+                withCredentials: true
+            });
 
-        const response = await axios.post("http://localhost:3000/api/auth/user/register", {
-            fullName: firstName + " " + lastName,
-            email,
-            password
-        },
-        {
-            withCredentials: true
-        })
-
-        console.log(response.data);
-
-        navigate("/")
-
+            console.log('Registration successful:', response.data);
+            
+            // Navigate to home page
+            navigate("/home");
+        } catch (err) {
+            console.error('Registration error:', err);
+            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -43,25 +50,32 @@ const UserRegister = () => {
                     <strong style={{ fontWeight: 600 }}>Switch:</strong> <Link to="/user/register">User</Link> • <Link to="/food-partner/register">Food partner</Link>
                 </nav>
                 <form className="auth-form" onSubmit={handleSubmit} noValidate>
+                    {error && (
+                        <div className="error-message" role="alert">
+                            {error}
+                        </div>
+                    )}
                     <div className="two-col">
                         <div className="field-group">
                             <label htmlFor="firstName">First Name</label>
-                            <input id="firstName" name="firstName" placeholder="Jane" autoComplete="given-name" required />
+                            <input id="firstName" name="firstName" placeholder="Jane" autoComplete="given-name" required disabled={loading} />
                         </div>
                         <div className="field-group">
                             <label htmlFor="lastName">Last Name</label>
-                            <input id="lastName" name="lastName" placeholder="Doe" autoComplete="family-name" required />
+                            <input id="lastName" name="lastName" placeholder="Doe" autoComplete="family-name" required disabled={loading} />
                         </div>
                     </div>
                     <div className="field-group">
                         <label htmlFor="email">Email</label>
-                        <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
+                        <input id="email" name="email" type="email" placeholder="you@example.com" autoComplete="email" required disabled={loading} />
                     </div>
                     <div className="field-group">
                         <label htmlFor="password">Password</label>
-                        <input id="password" name="password" type="password" placeholder="••••••••" autoComplete="new-password" required />
+                        <input id="password" name="password" type="password" placeholder="••••••••" autoComplete="new-password" required disabled={loading} />
                     </div>
-                    <button className="auth-submit" type="submit">Sign Up</button>
+                    <button className="auth-submit" type="submit" disabled={loading}>
+                        {loading ? 'Creating account...' : 'Sign Up'}
+                    </button>
                 </form>
                 <div className="auth-alt-action">
                     Already have an account? <Link to="/user/login">Sign in</Link>

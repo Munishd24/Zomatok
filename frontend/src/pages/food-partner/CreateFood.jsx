@@ -4,11 +4,13 @@ import '../../styles/create-food.css';
 import { useNavigate } from 'react-router-dom';
 
 const CreateFood = () => {
-    const [ name, setName ] = useState('');
-    const [ description, setDescription ] = useState('');
-    const [ videoFile, setVideoFile ] = useState(null);
-    const [ videoURL, setVideoURL ] = useState('');
-    const [ fileError, setFileError ] = useState('');
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [videoFile, setVideoFile] = useState(null);
+    const [videoURL, setVideoURL] = useState('');
+    const [fileError, setFileError] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
 
     const navigate = useNavigate();
@@ -49,21 +51,35 @@ const CreateFood = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
 
-        const formData = new FormData();
+        try {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append("mama", videoFile);
 
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append("mama", videoFile);
+            const response = await axios.post("http://localhost:3000/api/food", formData, {
+                withCredentials: true,
+            });
 
-        const response = await axios.post("http://localhost:3000/api/food", formData, {
-            withCredentials: true,
-        })
-
-        console.log(response.data);
-        navigate("/"); // Redirect to home or another page after successful creation
-        // Optionally reset
-        // setName(''); setDescription(''); setVideoFile(null);
+            console.log('Food created successfully:', response.data);
+            
+            // Navigate to home page
+            navigate("/home");
+        } catch (err) {
+            console.error('Create food error:', err);
+            // If 401 with clearCookie, redirect to login
+            if (err.response?.status === 401 && err.response?.data?.clearCookie) {
+                console.log('Invalid session, redirecting to login...');
+                navigate('/food-partner/login');
+                return;
+            }
+            setError(err.response?.data?.message || 'Failed to upload food video. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const isDisabled = useMemo(() => !name.trim() || !videoFile, [ name, videoFile ]);
@@ -77,6 +93,11 @@ const CreateFood = () => {
                 </header>
 
                 <form className="create-food-form" onSubmit={onSubmit}>
+                    {error && (
+                        <div className="error-message" role="alert">
+                            {error}
+                        </div>
+                    )}
                     <div className="field-group">
                         <label htmlFor="foodVideo">Food Video</label>
                         <input
@@ -86,6 +107,7 @@ const CreateFood = () => {
                             type="file"
                             accept="video/*"
                             onChange={onFileChange}
+                            disabled={loading}
                         />
 
                         <div
@@ -141,6 +163,7 @@ const CreateFood = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
+                            disabled={loading}
                         />
                     </div>
 
@@ -152,12 +175,13 @@ const CreateFood = () => {
                             placeholder="Write a short description: ingredients, taste, spice level, etc."
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            disabled={loading}
                         />
                     </div>
 
                     <div className="form-actions">
-                        <button className="btn-primary" type="submit" disabled={isDisabled}>
-                            Save Food
+                        <button className="btn-primary" type="submit" disabled={isDisabled || loading}>
+                            {loading ? 'Uploading...' : 'Save Food'}
                         </button>
                     </div>
                 </form>
