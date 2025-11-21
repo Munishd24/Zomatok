@@ -80,4 +80,3 @@ To run the application locally using Docker Compose:
 ## 🤝 Contributing
 
 As this is a learning project, suggestions and contributions are welcome! Please feel free to submit a Pull Request or open an issue.
->>>>>>> 5eae663 (Added readme file)
