@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 
 async function authFoodPartnerMiddleware(req, res, next) {
 
-    const token = req.cookies.token;
+    const token = req.cookies.partnerToken;
     
     console.log('[Auth Food Partner] Cookies received:', req.cookies);
     console.log('[Auth Food Partner] Token:', token ? 'Present' : 'Missing');
@@ -26,7 +26,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
         if (!foodPartner) {
             console.log('[Auth Food Partner] Food partner not found in DB - clearing invalid cookie');
             // Clear the invalid cookie
-            res.clearCookie("token", { httpOnly: true, sameSite: 'Lax', path: '/' });
+            res.clearCookie("partnerToken", { httpOnly: true, sameSite: 'Lax', path: '/' });
             return res.status(401).json({
                 message: "Food partner account not found. Please login again.",
                 clearCookie: true
@@ -41,7 +41,7 @@ async function authFoodPartnerMiddleware(req, res, next) {
     } catch (err) {
         console.log('[Auth Food Partner] Token verification failed:', err.message);
         // Clear invalid token
-        res.clearCookie("token", { httpOnly: true, sameSite: 'Lax', path: '/' });
+        res.clearCookie("partnerToken", { httpOnly: true, sameSite: 'Lax', path: '/' });
         return res.status(401).json({
             message: "Invalid or expired token. Please login again.",
             clearCookie: true

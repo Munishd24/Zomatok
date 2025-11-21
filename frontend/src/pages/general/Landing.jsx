@@ -7,7 +7,7 @@ const Landing = () => {
     <div className="landing-page">
       <div className="landing-container">
         <div className="landing-content">
-          <h1 className="landing-title">FoodView</h1>
+          <h1 className="landing-title">Zomatok</h1>
           <p className="landing-subtitle">
             Share and discover amazing food videos
           </p>

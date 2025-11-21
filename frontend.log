@@ -1,0 +1,7 @@
+
+> frontend@0.0.0 dev
+> vite --host
+
+5:31:26 AM [vite] (client) Re-optimizing dependencies because vite config has changed
+error when starting dev server:
+Error: EACCES: permission denied, unlink '/home/munish/Food-reels/frontend/node_modules/.vite/deps/_metadata.json'

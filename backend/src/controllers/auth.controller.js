@@ -126,7 +126,7 @@ async function registerFoodPartner(req, res) {
         id: foodPartner._id,
     }, process.env.JWT_SECRET)
 
-    res.cookie("token", token, cookieOptions)
+    res.cookie("partnerToken", token, cookieOptions)
 
     res.status(201).json({
         message: "Food partner registered successfully",
@@ -168,7 +168,7 @@ async function loginFoodPartner(req, res) {
         id: foodPartner._id,
     }, process.env.JWT_SECRET)
 
-    res.cookie("token", token, cookieOptions)
+    res.cookie("partnerToken", token, cookieOptions)
 
     res.status(200).json({
         message: "Food partner logged in successfully",
@@ -181,7 +181,7 @@ async function loginFoodPartner(req, res) {
 }
 
 function logoutFoodPartner(req, res) {
-    res.clearCookie("token", cookieOptions);
+    res.clearCookie("partnerToken", cookieOptions);
     res.status(200).json({
         message: "Food partner logged out successfully"
     });
@@ -205,7 +205,7 @@ function checkUser(req, res) {
 }
 
 function checkFoodPartner(req, res) {
-    const token = req.cookies.token;
+    const token = req.cookies.partnerToken;
     console.log('[Check Food Partner] Cookies:', req.cookies);
     console.log('[Check Food Partner] Token:', token ? 'Present' : 'Missing');
     
